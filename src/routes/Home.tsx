@@ -10,12 +10,20 @@ export default function Home() {
         En let og sjov måde at lære touch-typing på dansk tastatur — for både
         børn og voksne. Din fremgang gemmes automatisk i browseren.
       </p>
-      <Link
-        to="/lesson/1"
-        className="rounded-xl bg-indigo-600 px-6 py-3 text-lg font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700"
-      >
-        Start første lektion
-      </Link>
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <Link
+          to="/lesson/1"
+          className="rounded-xl bg-indigo-600 px-6 py-3 text-lg font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700"
+        >
+          Start første lektion
+        </Link>
+        <Link
+          to="/lessons"
+          className="rounded-xl border border-slate-300 px-6 py-3 text-lg font-semibold transition-colors hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-800"
+        >
+          Alle lektioner
+        </Link>
+      </div>
     </section>
   );
 }

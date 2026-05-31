@@ -40,3 +40,19 @@ export function computeStats(
   const accuracy = total > 0 ? correct / total : 1;
   return { wpm, accuracy, errors, correct, total, elapsedMs };
 }
+
+/** Combine several drill results into one overall result for a lesson. */
+export function aggregateStats(parts: TypingStats[]): TypingStats {
+  const correct = parts.reduce((n, p) => n + p.correct, 0);
+  const total = parts.reduce((n, p) => n + p.total, 0);
+  const elapsedMs = parts.reduce((n, p) => n + p.elapsedMs, 0);
+  const minutes = elapsedMs / MS_PER_MINUTE;
+  return {
+    correct,
+    total,
+    errors: total - correct,
+    elapsedMs,
+    wpm: minutes > 0 ? correct / CHARS_PER_WORD / minutes : 0,
+    accuracy: total > 0 ? correct / total : 1,
+  };
+}

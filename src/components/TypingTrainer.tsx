@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTypingEngine } from '../engine/useTypingEngine';
+import type { TypingStats } from '../engine/stats';
 import { findKey } from '../keyboard/charMap';
 import { FINGER_INFO } from '../keyboard/fingers';
 import { KEY_BY_CODE } from '../keyboard/layout';
@@ -8,23 +9,34 @@ import { Keyboard, FingerLegend } from '../keyboard/Keyboard';
 interface TypingTrainerProps {
   /** The text to practise. Single line; spaces are part of the drill. */
   text: string;
+  /** Called once when the drill is finished, with its final stats. */
+  onComplete?: (stats: TypingStats) => void;
 }
 
-/** Render the drill text as a space so it stays visible and selectable. */
+/** Render spaces visibly so they stay readable in the drill text. */
 function displayChar(char: string): string {
   return char === ' ' ? '␣' : char;
 }
 
-export default function TypingTrainer({ text }: TypingTrainerProps) {
-  const { state, stats, nextChar, type, backspace, reset } =
-    useTypingEngine(text);
+export default function TypingTrainer({ text, onComplete }: TypingTrainerProps) {
+  const { state, stats, nextChar, type, backspace } = useTypingEngine(text);
   const [focused, setFocused] = useState(false);
   const areaRef = useRef<HTMLDivElement>(null);
+  const reportedRef = useRef(false);
 
   // Focus the typing area whenever a new drill loads.
   useEffect(() => {
+    reportedRef.current = false;
     areaRef.current?.focus();
   }, [text]);
+
+  // Report completion exactly once, with the frozen final stats.
+  useEffect(() => {
+    if (state.status === 'finished' && !reportedRef.current) {
+      reportedRef.current = true;
+      onComplete?.(stats);
+    }
+  }, [state.status, stats, onComplete]);
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     // Leave browser/OS shortcuts alone.
@@ -112,40 +124,23 @@ export default function TypingTrainer({ text }: TypingTrainerProps) {
         })}
       </div>
 
-      {/* Prompt / completion */}
-      {isFinished ? (
-        <div className="flex flex-col items-center gap-3 rounded-xl bg-emerald-50 p-5 text-center dark:bg-emerald-500/10">
-          <p className="text-lg font-semibold text-emerald-700 dark:text-emerald-300">
-            🎉 Flot! Du skrev {Math.round(stats.wpm)} ord/min med{' '}
-            {Math.round(stats.accuracy * 100)}% præcision.
-          </p>
-          <button
-            type="button"
-            onClick={() => {
-              reset();
-              areaRef.current?.focus();
-            }}
-            className="rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700"
-          >
-            Prøv igen
-          </button>
-        </div>
-      ) : (
-        <p className="text-center text-sm text-slate-500 dark:text-slate-400">
-          {focused ? (
-            nextFinger ? (
-              <>
-                Næste: <strong>{FINGER_INFO[nextFinger].label}</strong>
-                {nextTarget?.shift && ' (+ Shift)'}
-              </>
-            ) : (
-              'Begynd at skrive…'
-            )
-          ) : (
-            'Klik på feltet ovenfor for at begynde.'
-          )}
-        </p>
-      )}
+      {/* Prompt */}
+      <p className="text-center text-sm text-slate-500 dark:text-slate-400">
+        {isFinished ? (
+          <span className="font-medium text-emerald-600 dark:text-emerald-400">
+            ✓ Øvelse fuldført
+          </span>
+        ) : !focused ? (
+          'Klik på feltet ovenfor for at begynde.'
+        ) : nextFinger ? (
+          <>
+            Næste: <strong>{FINGER_INFO[nextFinger].label}</strong>
+            {nextTarget?.shift && ' (+ Shift)'}
+          </>
+        ) : (
+          'Begynd at skrive…'
+        )}
+      </p>
 
       {/* On-screen keyboard */}
       <div className="rounded-xl border border-slate-200 bg-slate-100/60 p-3 dark:border-slate-700 dark:bg-slate-800/40">
