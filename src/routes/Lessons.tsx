@@ -8,6 +8,10 @@ import type { LessonRecord } from '../progress/types';
 const LEVEL_TITLES: Record<number, string> = {
   1: 'Niveau 1 · Hjemmerækken',
   2: 'Niveau 2 · Øverste række',
+  3: 'Niveau 3 · Nederste række',
+  4: 'Niveau 4 · Store bogstaver',
+  5: 'Niveau 5 · Talrækken',
+  6: 'Niveau 6 · Tegn og symboler',
 };
 
 function groupByLevel(lessons: Lesson[]): [number, Lesson[]][] {

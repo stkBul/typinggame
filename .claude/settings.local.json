@@ -8,7 +8,14 @@
       "Bash(git init *)",
       "Bash(git branch *)",
       "Bash(git add *)",
-      "Bash(gh --version)"
+      "Bash(gh --version)",
+      "Bash(git config *)",
+      "Bash(git commit -q -m ' *)",
+      "Bash(git push *)",
+      "Bash(npx vitest *)",
+      "Bash(npx prettier *)",
+      "Bash(npx tsc *)",
+      "Bash(npx eslint *)"
     ]
   }
 }
