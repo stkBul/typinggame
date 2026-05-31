@@ -1,9 +1,12 @@
 import { Link, useParams } from 'react-router-dom';
 import LessonRunner from '../components/LessonRunner';
 import { getLesson } from '../lessons/curriculum';
+import { useProgress } from '../progress/context';
+import { isUnlocked } from '../progress/unlock';
 
 export default function Lesson() {
   const { lessonId } = useParams();
+  const { progress } = useProgress();
   const lesson = getLesson(lessonId);
 
   if (!lesson) {
@@ -11,6 +14,24 @@ export default function Lesson() {
       <section className="space-y-4 text-center">
         <h1 className="text-2xl font-bold">Lektionen findes ikke</h1>
         <Link to="/lessons" className="font-medium text-indigo-600 hover:underline">
+          Se alle lektioner
+        </Link>
+      </section>
+    );
+  }
+
+  if (!isUnlocked(lesson.id, progress)) {
+    return (
+      <section className="space-y-4 text-center">
+        <p className="text-5xl">🔒</p>
+        <h1 className="text-2xl font-bold">Lektionen er låst</h1>
+        <p className="text-slate-600 dark:text-slate-300">
+          Bestå den forrige lektion for at låse "{lesson.title}" op.
+        </p>
+        <Link
+          to="/lessons"
+          className="inline-block font-medium text-indigo-600 hover:underline"
+        >
           Se alle lektioner
         </Link>
       </section>

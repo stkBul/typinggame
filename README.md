@@ -61,8 +61,10 @@ src/
 ## Roadmap
 
 1. ✅ **Scaffold + CI** — project setup, routing shell, GitHub Pages deploy
-2. ⬜ **Keyboard + engine** — Danish QWERTY on-screen keyboard, 10-finger map,
+2. ✅ **Keyboard + engine** — Danish QWERTY on-screen keyboard, 10-finger map,
    keystroke scoring (WPM / accuracy / errors)
-3. ⬜ **Lessons** — curriculum data model + home-row-outward Danish lessons
-4. ⬜ **Progress + persistence** — `localStorage` store, stats, level unlocking
+3. ✅ **Lessons** — curriculum data model + home-row-outward Danish lessons
+   with multi-drill runner and pass/fail gating
+4. ✅ **Progress + persistence** — `localStorage` store, progress dashboard,
+   level unlocking
 5. ⬜ **Fun layer** — kid/adult themes, badges, streaks, sounds, polish

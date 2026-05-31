@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { aggregateStats, type TypingStats } from '../engine/stats';
 import { getNextLesson } from '../lessons/curriculum';
+import { useProgress } from '../progress/context';
 import type { Drill, Lesson } from '../lessons/types';
 import TypingTrainer from './TypingTrainer';
 
@@ -16,8 +17,10 @@ const DRILL_KIND_LABEL: Record<Drill['kind'], string> = {
 };
 
 export default function LessonRunner({ lesson }: LessonRunnerProps) {
+  const { recordResult } = useProgress();
   const [drillIndex, setDrillIndex] = useState(0);
   const [results, setResults] = useState<TypingStats[]>([]);
+  const recordedRef = useRef(false);
 
   const drill = lesson.drills[drillIndex];
   const isLastDrill = drillIndex === lesson.drills.length - 1;
@@ -31,6 +34,24 @@ export default function LessonRunner({ lesson }: LessonRunnerProps) {
     setResults([]);
     setDrillIndex(0);
   }
+
+  // Persist the lesson outcome once, when all drills are done.
+  useEffect(() => {
+    if (!lessonDone) {
+      recordedRef.current = false;
+      return;
+    }
+    if (recordedRef.current) return;
+    recordedRef.current = true;
+    const total = aggregateStats(results);
+    recordResult({
+      lessonId: lesson.id,
+      wpm: total.wpm,
+      accuracy: total.accuracy,
+      passed:
+        total.wpm >= lesson.targetWpm && total.accuracy >= lesson.minAccuracy,
+    });
+  }, [lessonDone, results, lesson, recordResult]);
 
   if (lessonDone) {
     return (

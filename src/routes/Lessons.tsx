@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
 import { LESSONS } from '../lessons/curriculum';
 import type { Lesson } from '../lessons/types';
+import { useProgress } from '../progress/context';
+import { isUnlocked } from '../progress/unlock';
+import type { LessonRecord } from '../progress/types';
 
 const LEVEL_TITLES: Record<number, string> = {
   1: 'Niveau 1 · Hjemmerækken',
@@ -18,6 +21,7 @@ function groupByLevel(lessons: Lesson[]): [number, Lesson[]][] {
 }
 
 export default function Lessons() {
+  const { progress } = useProgress();
   const levels = groupByLevel(LESSONS);
 
   return (
@@ -25,8 +29,8 @@ export default function Lessons() {
       <header className="space-y-1">
         <h1 className="text-2xl font-bold">Lektioner</h1>
         <p className="text-slate-600 dark:text-slate-300">
-          Følg rækkefølgen fra hjemmerækken og udad. Hver lektion bygger på den
-          forrige.
+          Følg rækkefølgen fra hjemmerækken og udad. Bestå en lektion for at
+          låse den næste op.
         </p>
       </header>
 
@@ -38,36 +42,85 @@ export default function Lessons() {
           <ul className="grid gap-3 sm:grid-cols-2">
             {lessons.map((lesson) => (
               <li key={lesson.id}>
-                <Link
-                  to={`/lesson/${lesson.id}`}
-                  className="flex h-full flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 transition-colors hover:border-indigo-400 hover:shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:hover:border-indigo-500"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <h3 className="font-semibold">{lesson.title}</h3>
-                    <div className="flex gap-1">
-                      {lesson.newChars.map((c) => (
-                        <kbd
-                          key={c}
-                          className="rounded bg-indigo-100 px-1.5 py-0.5 font-mono text-xs font-semibold text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300"
-                        >
-                          {c}
-                        </kbd>
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">
-                    {lesson.description}
-                  </p>
-                  <p className="mt-auto text-xs text-slate-400 dark:text-slate-500">
-                    Mål: {lesson.targetWpm} WPM ·{' '}
-                    {Math.round(lesson.minAccuracy * 100)}% præcision
-                  </p>
-                </Link>
+                <LessonCard
+                  lesson={lesson}
+                  record={progress.records[lesson.id]}
+                  unlocked={isUnlocked(lesson.id, progress)}
+                />
               </li>
             ))}
           </ul>
         </div>
       ))}
     </section>
+  );
+}
+
+function LessonCard({
+  lesson,
+  record,
+  unlocked,
+}: {
+  lesson: Lesson;
+  record: LessonRecord | undefined;
+  unlocked: boolean;
+}) {
+  const passed = record?.passed ?? false;
+
+  const inner = (
+    <>
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="flex items-center gap-2 font-semibold">
+          {!unlocked && <span aria-label="låst">🔒</span>}
+          {passed && <span aria-label="bestået">✅</span>}
+          {lesson.title}
+        </h3>
+        <div className="flex gap-1">
+          {lesson.newChars.map((c) => (
+            <kbd
+              key={c}
+              className="rounded bg-indigo-100 px-1.5 py-0.5 font-mono text-xs font-semibold text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300"
+            >
+              {c}
+            </kbd>
+          ))}
+        </div>
+      </div>
+      <p className="text-sm text-slate-600 dark:text-slate-300">
+        {lesson.description}
+      </p>
+      <p className="mt-auto text-xs text-slate-400 dark:text-slate-500">
+        {record
+          ? `Bedste: ${Math.round(record.bestWpm)} WPM · ${Math.round(
+              record.bestAccuracy * 100,
+            )}%`
+          : `Mål: ${lesson.targetWpm} WPM · ${Math.round(
+              lesson.minAccuracy * 100,
+            )}%`}
+      </p>
+    </>
+  );
+
+  const base =
+    'flex h-full flex-col gap-2 rounded-xl border p-4 transition-colors';
+
+  if (!unlocked) {
+    return (
+      <div
+        className={`${base} cursor-not-allowed border-slate-200 bg-slate-50 opacity-60 dark:border-slate-800 dark:bg-slate-900/40`}
+        aria-disabled
+      >
+        {inner}
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      to={`/lesson/${lesson.id}`}
+      className={`${base} border-slate-200 bg-white hover:border-indigo-400 hover:shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:hover:border-indigo-500`}
+    >
+      {inner}
+    </Link>
   );
 }
