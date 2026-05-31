@@ -6,6 +6,7 @@ import { FINGER_INFO } from '../keyboard/fingers';
 import { KEY_BY_CODE } from '../keyboard/layout';
 import { Keyboard, FingerLegend } from '../keyboard/Keyboard';
 import { useSound } from '../sound/useSound';
+import DrillText from './DrillText';
 
 const LAYOUT_WARN_KEY = 'tastetrup.layoutWarnDismissed';
 
@@ -14,11 +15,6 @@ interface TypingTrainerProps {
   text: string;
   /** Called once when the drill is finished, with its final stats. */
   onComplete?: (stats: TypingStats) => void;
-}
-
-/** Render spaces visibly so they stay readable in the drill text. */
-function displayChar(char: string): string {
-  return char === ' ' ? '␣' : char;
 }
 
 export default function TypingTrainer({ text, onComplete }: TypingTrainerProps) {
@@ -94,7 +90,7 @@ export default function TypingTrainer({ text, onComplete }: TypingTrainerProps) 
   const isFinished = state.status === 'finished';
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {layoutWarn && (
         <div className="flex items-start gap-3 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
           <span className="text-lg">⚠️</span>
@@ -138,39 +134,18 @@ export default function TypingTrainer({ text, onComplete }: TypingTrainerProps) 
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         className={[
-          'cursor-text rounded-xl border-2 bg-white p-6 font-mono text-2xl leading-relaxed tracking-wide outline-none dark:bg-slate-900',
+          'cursor-text rounded-xl border-2 bg-white p-4 font-mono text-2xl leading-relaxed tracking-wide outline-none dark:bg-slate-900',
           focused
             ? 'border-indigo-500'
             : 'border-slate-200 dark:border-slate-700',
         ].join(' ')}
       >
-        {Array.from(text).map((char, i) => {
-          const isCurrent = i === state.cursor;
-          const isTyped = i < state.cursor;
-          const correct = isTyped && state.typed[i] === char;
-          return (
-            <span
-              key={i}
-              className={[
-                'rounded px-px',
-                isCurrent && focused
-                  ? 'bg-indigo-200 underline decoration-2 underline-offset-4 dark:bg-indigo-500/40'
-                  : '',
-                isTyped && correct
-                  ? 'text-emerald-600 dark:text-emerald-400'
-                  : '',
-                isTyped && !correct
-                  ? 'bg-red-200 text-red-700 dark:bg-red-500/30 dark:text-red-300'
-                  : '',
-                !isTyped && !isCurrent
-                  ? 'text-slate-400 dark:text-slate-500'
-                  : '',
-              ].join(' ')}
-            >
-              {displayChar(char)}
-            </span>
-          );
-        })}
+        <DrillText
+          text={text}
+          typed={state.typed}
+          cursor={state.cursor}
+          focused={focused}
+        />
       </div>
 
       {/* Prompt */}
@@ -192,7 +167,7 @@ export default function TypingTrainer({ text, onComplete }: TypingTrainerProps) 
       </p>
 
       {/* On-screen keyboard */}
-      <div className="rounded-xl border border-slate-200 bg-slate-100/60 p-3 dark:border-slate-700 dark:bg-slate-800/40">
+      <div className="rounded-xl border border-slate-200 bg-slate-100/60 p-2 dark:border-slate-700 dark:bg-slate-800/40">
         <Keyboard
           nextCode={focused ? nextTarget?.code : null}
           nextShift={nextTarget?.shift ?? false}

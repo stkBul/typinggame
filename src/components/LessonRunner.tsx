@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { aggregateStats, type TypingStats } from '../engine/stats';
 import { getNextLesson } from '../lessons/curriculum';
 import { useProgress } from '../progress/context';
@@ -17,6 +17,9 @@ const DRILL_KIND_LABEL: Record<Drill['kind'], string> = {
   words: 'Ord',
   sentence: 'Sætning',
 };
+
+/** Seconds to show the result before auto-advancing to the next lesson. */
+const AUTO_ADVANCE_SECONDS = 4;
 
 export default function LessonRunner({ lesson }: LessonRunnerProps) {
   const { progress, recordResult } = useProgress();
@@ -141,12 +144,29 @@ function LessonSummary({
   newBadges: Badge[];
   onRetry: () => void;
 }) {
+  const navigate = useNavigate();
   const total = aggregateStats(results);
   const wpm = Math.round(total.wpm);
   const accuracy = Math.round(total.accuracy * 100);
   const passed =
     total.wpm >= lesson.targetWpm && total.accuracy >= lesson.minAccuracy;
   const nextLesson = getNextLesson(lesson.id);
+
+  const autoAdvancing = passed && nextLesson !== undefined;
+  const [staying, setStaying] = useState(false);
+  const [countdown, setCountdown] = useState(AUTO_ADVANCE_SECONDS);
+
+  // On a pass, count down and then move to the next lesson automatically —
+  // unless the learner chooses to stay (to review or retry).
+  useEffect(() => {
+    if (!autoAdvancing || staying || nextLesson === undefined) return;
+    if (countdown <= 0) {
+      navigate(`/lesson/${nextLesson.id}`);
+      return;
+    }
+    const id = window.setTimeout(() => setCountdown((c) => c - 1), 1000);
+    return () => window.clearTimeout(id);
+  }, [autoAdvancing, staying, countdown, nextLesson, navigate]);
 
   return (
     <div className="space-y-6">
@@ -228,6 +248,19 @@ function LessonSummary({
           </Link>
         )}
       </div>
+
+      {autoAdvancing && !staying && (
+        <p className="text-center text-sm text-slate-500 dark:text-slate-400">
+          Går videre til næste lektion om {countdown}…{' '}
+          <button
+            type="button"
+            onClick={() => setStaying(true)}
+            className="font-medium text-indigo-600 underline hover:no-underline"
+          >
+            Bliv på siden
+          </button>
+        </p>
+      )}
     </div>
   );
 }

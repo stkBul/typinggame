@@ -65,7 +65,9 @@ export default function Lesson() {
         </p>
       </header>
 
-      <LessonRunner lesson={lesson} />
+      {/* key remounts the runner per lesson so its state never leaks across
+          lessons (otherwise navigating reuses stale results/progress). */}
+      <LessonRunner key={lesson.id} lesson={lesson} />
     </section>
   );
 }

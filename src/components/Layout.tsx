@@ -3,6 +3,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 const navItems = [
   { to: '/', label: 'Hjem', end: true },
   { to: '/lessons', label: 'Lektioner', end: false },
+  { to: '/practice', label: 'Fri skrivning', end: false },
   { to: '/progress', label: 'Fremgang', end: false },
   { to: '/settings', label: 'Indstillinger', end: false },
 ];
@@ -40,7 +41,7 @@ export default function Layout() {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6">
         <Outlet />
       </main>
 

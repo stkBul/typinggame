@@ -39,6 +39,12 @@ export default function Home() {
           Alle lektioner
         </Link>
       </div>
+      <Link
+        to="/practice"
+        className="text-sm font-medium text-indigo-600 hover:underline"
+      >
+        ⏱️ Eller test din hastighed på ét minut
+      </Link>
     </section>
   );
 }

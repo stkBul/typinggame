@@ -25,9 +25,9 @@ export function Keyboard({ nextCode, nextShift = false }: KeyboardProps) {
   const shiftCode = shiftCodeFor(nextCode, nextShift);
 
   return (
-    <div className="w-full select-none space-y-1.5">
+    <div className="w-full select-none space-y-1">
       {DANISH_QWERTY.map((row, i) => (
-        <div key={i} className="flex gap-1.5">
+        <div key={i} className="flex gap-1">
           {row.map((key) => {
             const highlighted = key.code === nextCode || key.code === shiftCode;
             const colors = colorForFinger(key.finger);
@@ -36,7 +36,7 @@ export function Keyboard({ nextCode, nextShift = false }: KeyboardProps) {
                 key={key.code}
                 style={{ flexGrow: key.width ?? 1, flexBasis: 0 }}
                 className={[
-                  'relative flex h-11 items-end justify-center rounded-md border text-sm font-medium transition-transform sm:h-12',
+                  'relative flex h-8 items-center justify-center rounded-md border text-sm font-medium transition-transform sm:h-10',
                   'border-slate-300 dark:border-slate-700',
                   highlighted
                     ? `${colors.active} z-10 scale-105 shadow-md ring-2 ring-offset-1 ${colors.ring} dark:ring-offset-slate-900`
@@ -48,9 +48,9 @@ export function Keyboard({ nextCode, nextShift = false }: KeyboardProps) {
                     {key.shiftLabel}
                   </span>
                 )}
-                <span className="pb-1">{key.label}</span>
+                <span>{key.label}</span>
                 {key.homeAnchor && (
-                  <span className="absolute bottom-1.5 h-0.5 w-3 rounded-full bg-current opacity-60" />
+                  <span className="absolute bottom-1 h-0.5 w-3 rounded-full bg-current opacity-60" />
                 )}
               </div>
             );
