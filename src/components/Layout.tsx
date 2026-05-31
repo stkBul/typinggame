@@ -4,6 +4,7 @@ const navItems = [
   { to: '/', label: 'Hjem', end: true },
   { to: '/lessons', label: 'Lektioner', end: false },
   { to: '/practice', label: 'Fri skrivning', end: false },
+  { to: '/game', label: 'Ballonspil', end: false },
   { to: '/progress', label: 'Fremgang', end: false },
   { to: '/settings', label: 'Indstillinger', end: false },
 ];

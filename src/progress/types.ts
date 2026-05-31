@@ -16,6 +16,8 @@ export interface ProgressData {
   version: number;
   records: Record<string, LessonRecord>;
   streak: Streak;
+  /** Best score in the balloon-popping game. */
+  gameBest: number;
 }
 
 /** A single finished-lesson outcome handed to the store. */

@@ -4,6 +4,8 @@ import type { LessonResult, ProgressData } from './types';
 export interface ProgressContextValue {
   progress: ProgressData;
   recordResult: (result: LessonResult) => void;
+  /** Save a finished balloon-game score, keeping the personal best. */
+  recordGameScore: (score: number) => void;
   reset: () => void;
 }
 

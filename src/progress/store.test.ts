@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   CURRENT_VERSION,
   REVIEW_AFTER_MS,
+  applyGameScore,
   applyResult,
   createEmptyProgress,
   lessonsNeedingReview,
@@ -82,6 +83,7 @@ describe('lessonsNeedingReview', () => {
       version: CURRENT_VERSION,
       records: Object.fromEntries(records.map((r) => [r.lessonId, r])),
       streak: emptyStreak(),
+      gameBest: 0,
     };
   }
 
@@ -145,8 +147,21 @@ describe('parseProgress', () => {
         },
       },
       streak: { current: 2, longest: 4, lastActiveDay: '2026-05-30' },
+      gameBest: 420,
     };
     expect(parseProgress(JSON.stringify(stored))).toEqual(stored);
+  });
+
+  it('migrates v2 progress by backfilling a zero game best', () => {
+    const v2 = {
+      version: 2,
+      records: {},
+      streak: { current: 1, longest: 1, lastActiveDay: '2026-05-30' },
+    };
+    const migrated = parseProgress(JSON.stringify(v2));
+    expect(migrated.version).toBe(CURRENT_VERSION);
+    expect(migrated.gameBest).toBe(0);
+    expect(migrated.streak.current).toBe(1);
   });
 
   it('migrates v1 progress by backfilling an empty streak', () => {
@@ -171,5 +186,23 @@ describe('parseProgress', () => {
       longest: 0,
       lastActiveDay: null,
     });
+    expect(migrated.gameBest).toBe(0);
+  });
+});
+
+describe('applyGameScore', () => {
+  it('records a first score', () => {
+    expect(applyGameScore(createEmptyProgress(), 150).gameBest).toBe(150);
+  });
+
+  it('keeps the higher of the two scores', () => {
+    const data = applyGameScore(createEmptyProgress(), 200);
+    expect(applyGameScore(data, 120).gameBest).toBe(200);
+    expect(applyGameScore(data, 300).gameBest).toBe(300);
+  });
+
+  it('floors and clamps stray values', () => {
+    expect(applyGameScore(createEmptyProgress(), 99.9).gameBest).toBe(99);
+    expect(applyGameScore(createEmptyProgress(), -5).gameBest).toBe(0);
   });
 });

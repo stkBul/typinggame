@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState, type ReactNode } from 'react';
 import {
+  applyGameScore,
   applyResult,
   clearProgress,
   loadProgress,
@@ -20,14 +21,22 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const recordGameScore = useCallback((score: number) => {
+    setProgress((prev) => {
+      const next = applyGameScore(prev, score);
+      saveProgress(next);
+      return next;
+    });
+  }, []);
+
   const reset = useCallback(() => {
     clearProgress();
     setProgress(loadProgress());
   }, []);
 
   const value = useMemo(
-    () => ({ progress, recordResult, reset }),
-    [progress, recordResult, reset],
+    () => ({ progress, recordResult, recordGameScore, reset }),
+    [progress, recordResult, recordGameScore, reset],
   );
 
   return <ProgressContext value={value}>{children}</ProgressContext>;

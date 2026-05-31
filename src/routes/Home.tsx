@@ -59,12 +59,14 @@ export default function Home() {
             ⌨️ Lær at skrive
           </Link>
         </div>
-        <Link
-          to="/lessons"
-          className="text-sm font-medium text-indigo-600 hover:underline"
-        >
-          Se alle lektioner
-        </Link>
+        <div className="flex flex-wrap items-center justify-center gap-4 text-sm font-medium">
+          <Link to="/lessons" className="text-indigo-600 hover:underline">
+            Se alle lektioner
+          </Link>
+          <Link to="/game" className="text-indigo-600 hover:underline">
+            🎈 Spil ballonspillet
+          </Link>
+        </div>
 
         {reviewLesson && (
           <Link
