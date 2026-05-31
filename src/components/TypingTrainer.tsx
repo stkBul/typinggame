@@ -5,6 +5,9 @@ import { findKey } from '../keyboard/charMap';
 import { FINGER_INFO } from '../keyboard/fingers';
 import { KEY_BY_CODE } from '../keyboard/layout';
 import { Keyboard, FingerLegend } from '../keyboard/Keyboard';
+import { useSound } from '../sound/useSound';
+
+const LAYOUT_WARN_KEY = 'tastetrup.layoutWarnDismissed';
 
 interface TypingTrainerProps {
   /** The text to practise. Single line; spaces are part of the drill. */
@@ -20,9 +23,13 @@ function displayChar(char: string): string {
 
 export default function TypingTrainer({ text, onComplete }: TypingTrainerProps) {
   const { state, stats, nextChar, type, backspace } = useTypingEngine(text);
+  const sound = useSound();
   const [focused, setFocused] = useState(false);
+  const [layoutWarn, setLayoutWarn] = useState(false);
   const areaRef = useRef<HTMLDivElement>(null);
   const reportedRef = useRef(false);
+
+  const nextTarget = nextChar ? findKey(nextChar) : null;
 
   // Focus the typing area whenever a new drill loads.
   useEffect(() => {
@@ -30,13 +37,14 @@ export default function TypingTrainer({ text, onComplete }: TypingTrainerProps) 
     areaRef.current?.focus();
   }, [text]);
 
-  // Report completion exactly once, with the frozen final stats.
+  // Report completion exactly once, with the frozen final stats, and celebrate.
   useEffect(() => {
     if (state.status === 'finished' && !reportedRef.current) {
       reportedRef.current = true;
+      sound.success();
       onComplete?.(stats);
     }
-  }, [state.status, stats, onComplete]);
+  }, [state.status, stats, onComplete, sound]);
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     // Leave browser/OS shortcuts alone.
@@ -52,11 +60,34 @@ export default function TypingTrainer({ text, onComplete }: TypingTrainerProps) 
 
     if (e.key.length === 1) {
       e.preventDefault();
+      if (nextChar !== null) {
+        if (e.key === nextChar) {
+          sound.correct();
+        } else {
+          sound.error();
+          // Right physical key but wrong character => OS layout isn't Danish.
+          if (
+            nextTarget &&
+            e.code === nextTarget.code &&
+            sessionStorage.getItem(LAYOUT_WARN_KEY) !== '1'
+          ) {
+            setLayoutWarn(true);
+          }
+        }
+      }
       type(e.key);
     }
   }
 
-  const nextTarget = nextChar ? findKey(nextChar) : null;
+  function dismissLayoutWarn() {
+    setLayoutWarn(false);
+    try {
+      sessionStorage.setItem(LAYOUT_WARN_KEY, '1');
+    } catch {
+      // ignore
+    }
+  }
+
   const nextFinger = nextTarget
     ? KEY_BY_CODE.get(nextTarget.code)?.finger
     : undefined;
@@ -64,6 +95,24 @@ export default function TypingTrainer({ text, onComplete }: TypingTrainerProps) 
 
   return (
     <div className="space-y-6">
+      {layoutWarn && (
+        <div className="flex items-start gap-3 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
+          <span className="text-lg">⚠️</span>
+          <p className="flex-1">
+            Det ser ud til, at dit tastatur ikke er sat til <strong>dansk</strong>
+            . Skift til dansk tastaturlayout i din computers indstillinger for at
+            kunne skrive æ, ø og å.
+          </p>
+          <button
+            type="button"
+            onClick={dismissLayoutWarn}
+            className="font-medium underline hover:no-underline"
+          >
+            OK
+          </button>
+        </div>
+      )}
+
       {/* Stats bar */}
       <dl className="grid grid-cols-3 gap-3 text-center sm:grid-cols-4">
         <Stat label="WPM" value={Math.round(stats.wpm).toString()} />

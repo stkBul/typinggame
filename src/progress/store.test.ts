@@ -86,7 +86,32 @@ describe('parseProgress', () => {
           lastPlayedAt: 1,
         },
       },
+      streak: { current: 2, longest: 4, lastActiveDay: '2026-05-30' },
     };
     expect(parseProgress(JSON.stringify(stored))).toEqual(stored);
+  });
+
+  it('migrates v1 progress by backfilling an empty streak', () => {
+    const v1 = {
+      version: 1,
+      records: {
+        '1': {
+          lessonId: '1',
+          bestWpm: 10,
+          bestAccuracy: 0.95,
+          passed: true,
+          attempts: 1,
+          lastPlayedAt: 1,
+        },
+      },
+    };
+    const migrated = parseProgress(JSON.stringify(v1));
+    expect(migrated.version).toBe(CURRENT_VERSION);
+    expect(migrated.records['1'].passed).toBe(true);
+    expect(migrated.streak).toEqual({
+      current: 0,
+      longest: 0,
+      lastActiveDay: null,
+    });
   });
 });

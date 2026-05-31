@@ -1,7 +1,15 @@
 @import 'tailwindcss';
 
+/* Class-based dark mode: `dark:` responds to a `.dark` class on <html>,
+   which SettingsProvider toggles (and an inline script sets pre-hydration). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
 }
 
 html,

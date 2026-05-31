@@ -1,10 +1,15 @@
+import { advanceStreak, emptyStreak, normalizeStreak } from './streak';
 import type { LessonRecord, LessonResult, ProgressData } from './types';
 
 export const STORAGE_KEY = 'tastetrup.progress';
-export const CURRENT_VERSION = 1;
+export const CURRENT_VERSION = 2;
 
 export function createEmptyProgress(): ProgressData {
-  return { version: CURRENT_VERSION, records: {} };
+  return { version: CURRENT_VERSION, records: {}, streak: emptyStreak() };
+}
+
+function isRecordMap(value: unknown): value is Record<string, LessonRecord> {
+  return typeof value === 'object' && value !== null;
 }
 
 /**
@@ -28,23 +33,36 @@ export function applyResult(
   return {
     ...data,
     records: { ...data.records, [result.lessonId]: record },
+    streak: advanceStreak(data.streak, now),
   };
 }
 
-/** Parse stored progress, falling back to empty on any problem. */
+/** Parse stored progress, migrating older versions and falling back to empty. */
 export function parseProgress(raw: string | null): ProgressData {
   if (!raw) return createEmptyProgress();
   try {
-    const parsed = JSON.parse(raw) as Partial<ProgressData>;
-    if (
-      parsed?.version !== CURRENT_VERSION ||
-      typeof parsed.records !== 'object' ||
-      parsed.records === null
-    ) {
-      // Unknown/older shape: start fresh. (Add migrations here later.)
+    const parsed = JSON.parse(raw) as { version?: unknown; records?: unknown };
+    if (typeof parsed !== 'object' || parsed === null) {
       return createEmptyProgress();
     }
-    return { version: CURRENT_VERSION, records: parsed.records };
+    // v1 had no streak — migrate by backfilling an empty one.
+    if (parsed.version === 1 && isRecordMap(parsed.records)) {
+      return {
+        version: CURRENT_VERSION,
+        records: parsed.records,
+        streak: emptyStreak(),
+      };
+    }
+    if (parsed.version === CURRENT_VERSION && isRecordMap(parsed.records)) {
+      return {
+        version: CURRENT_VERSION,
+        records: parsed.records,
+        streak: normalizeStreak(
+          (parsed as { streak?: unknown }).streak,
+        ),
+      };
+    }
+    return createEmptyProgress();
   } catch {
     return createEmptyProgress();
   }

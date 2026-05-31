@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { LESSONS } from '../lessons/curriculum';
 import { useProgress } from '../progress/context';
 import { nextLessonId } from '../progress/unlock';
+import { earnedBadges } from '../badges/badges';
 
 export default function Progress() {
   const { progress } = useProgress();
@@ -14,6 +15,7 @@ export default function Progress() {
       ? records.reduce((sum, r) => sum + r.bestAccuracy, 0) / records.length
       : 0;
   const resumeId = nextLessonId(progress);
+  const badges = earnedBadges(progress);
 
   return (
     <section className="space-y-6">
@@ -27,12 +29,20 @@ export default function Progress() {
         </Link>
       </header>
 
-      <dl className="grid grid-cols-3 gap-3 text-center">
+      <dl className="grid grid-cols-2 gap-3 text-center sm:grid-cols-4">
         <Stat label="Bestået" value={`${passedCount} / ${LESSONS.length}`} />
         <Stat label="Bedste WPM" value={Math.round(bestWpm).toString()} />
         <Stat
           label="Gns. præcision"
           value={records.length ? `${Math.round(avgAccuracy * 100)}%` : '–'}
+        />
+        <Stat
+          label="Stime"
+          value={
+            progress.streak.current > 0
+              ? `🔥 ${progress.streak.current} dag${progress.streak.current === 1 ? '' : 'e'}`
+              : '–'
+          }
         />
       </dl>
 
@@ -76,6 +86,35 @@ export default function Progress() {
             })}
           </tbody>
         </table>
+      </div>
+
+      <div className="space-y-3">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+          Badges
+        </h2>
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {badges.map((badge) => (
+            <li
+              key={badge.id}
+              className={[
+                'flex items-center gap-3 rounded-xl border p-3',
+                badge.earned
+                  ? 'border-indigo-200 bg-white dark:border-indigo-500/30 dark:bg-slate-900'
+                  : 'border-slate-200 bg-slate-50 opacity-60 dark:border-slate-800 dark:bg-slate-900/40',
+              ].join(' ')}
+            >
+              <span className={badge.earned ? 'text-3xl' : 'text-3xl grayscale'}>
+                {badge.earned ? badge.emoji : '🔒'}
+              </span>
+              <div>
+                <p className="text-sm font-semibold">{badge.title}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  {badge.description}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

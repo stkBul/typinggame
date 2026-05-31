@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { aggregateStats, type TypingStats } from '../engine/stats';
 import { getNextLesson } from '../lessons/curriculum';
 import { useProgress } from '../progress/context';
+import { applyResult } from '../progress/store';
+import { BADGES, earnedBadgeIds, type Badge } from '../badges/badges';
 import type { Drill, Lesson } from '../lessons/types';
 import TypingTrainer from './TypingTrainer';
 
@@ -17,10 +19,12 @@ const DRILL_KIND_LABEL: Record<Drill['kind'], string> = {
 };
 
 export default function LessonRunner({ lesson }: LessonRunnerProps) {
-  const { recordResult } = useProgress();
+  const { progress, recordResult } = useProgress();
   const [drillIndex, setDrillIndex] = useState(0);
   const [results, setResults] = useState<TypingStats[]>([]);
   const recordedRef = useRef(false);
+  // Freeze the progress at mount so we can diff which badges this lesson earns.
+  const [progressAtMount] = useState(progress);
 
   const drill = lesson.drills[drillIndex];
   const isLastDrill = drillIndex === lesson.drills.length - 1;
@@ -54,8 +58,26 @@ export default function LessonRunner({ lesson }: LessonRunnerProps) {
   }, [lessonDone, results, lesson, recordResult]);
 
   if (lessonDone) {
+    const total = aggregateStats(results);
+    const passed =
+      total.wpm >= lesson.targetWpm && total.accuracy >= lesson.minAccuracy;
+    const before = earnedBadgeIds(progressAtMount);
+    const after = earnedBadgeIds(
+      applyResult(progressAtMount, {
+        lessonId: lesson.id,
+        wpm: total.wpm,
+        accuracy: total.accuracy,
+        passed,
+      }),
+    );
+    const newBadges = BADGES.filter((b) => after.has(b.id) && !before.has(b.id));
     return (
-      <LessonSummary lesson={lesson} results={results} onRetry={restart} />
+      <LessonSummary
+        lesson={lesson}
+        results={results}
+        newBadges={newBadges}
+        onRetry={restart}
+      />
     );
   }
 
@@ -111,10 +133,12 @@ export default function LessonRunner({ lesson }: LessonRunnerProps) {
 function LessonSummary({
   lesson,
   results,
+  newBadges,
   onRetry,
 }: {
   lesson: Lesson;
   results: TypingStats[];
+  newBadges: Badge[];
   onRetry: () => void;
 }) {
   const total = aggregateStats(results);
@@ -159,6 +183,25 @@ function LessonSummary({
           />
         </dl>
       </div>
+
+      {newBadges.length > 0 && (
+        <div className="rounded-2xl border border-indigo-200 bg-indigo-50 p-4 text-center dark:border-indigo-500/30 dark:bg-indigo-500/10">
+          <p className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
+            Ny badge optjent!
+          </p>
+          <ul className="mt-3 flex flex-wrap justify-center gap-3">
+            {newBadges.map((b) => (
+              <li
+                key={b.id}
+                className="flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-sm font-medium shadow-sm dark:bg-slate-900"
+              >
+                <span className="text-lg">{b.emoji}</span>
+                {b.title}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="flex flex-wrap justify-center gap-3">
         <button

@@ -9,6 +9,21 @@
       content="Lær at skrive touch (10-finger systemet) på en let og sjov måde — for både børn og voksne."
     />
     <title>TasteTrup — Lær touch-typing</title>
+    <script>
+      // Apply theme before paint to avoid a flash of the wrong colours.
+      try {
+        var s = JSON.parse(localStorage.getItem('tastetrup.settings') || '{}');
+        var scheme = s.colorScheme || 'system';
+        var dark =
+          scheme === 'dark' ||
+          (scheme === 'system' &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.classList.toggle('dark', dark);
+        document.documentElement.dataset.mode = s.mode === 'adult' ? 'adult' : 'kid';
+      } catch (e) {
+        /* ignore */
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

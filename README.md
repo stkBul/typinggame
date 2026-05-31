@@ -67,4 +67,5 @@ src/
    with multi-drill runner and pass/fail gating
 4. ✅ **Progress + persistence** — `localStorage` store, progress dashboard,
    level unlocking
-5. ⬜ **Fun layer** — kid/adult themes, badges, streaks, sounds, polish
+5. ✅ **Fun layer** — kid/adult themes, light/dark mode, badges, daily
+   streaks, typing sounds, and a Danish-keyboard-layout warning

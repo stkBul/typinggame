@@ -9,10 +9,13 @@ export interface LessonRecord {
   lastPlayedAt: number;
 }
 
+import type { Streak } from './streak';
+
 /** The full persisted progress blob. `version` enables future migrations. */
 export interface ProgressData {
   version: number;
   records: Record<string, LessonRecord>;
+  streak: Streak;
 }
 
 /** A single finished-lesson outcome handed to the store. */
