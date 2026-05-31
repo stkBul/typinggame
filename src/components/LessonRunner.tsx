@@ -16,7 +16,31 @@ const DRILL_KIND_LABEL: Record<Drill['kind'], string> = {
   keys: 'Taster',
   words: 'Ord',
   sentence: 'Sætning',
+  passage: 'Tekst',
 };
+
+/** How many of the worst keys to drill in the warm-up after a failed attempt. */
+const WEAKNESS_KEY_COUNT = 3;
+
+/**
+ * Build a short "keys" warm-up from the characters the learner missed most, so a
+ * retry starts by re-training the weakest keys. Returns null when there's nothing
+ * worth drilling (e.g. only spaces were missed).
+ */
+function buildWeaknessDrill(charErrors: Record<string, number>): Drill | null {
+  const worst = Object.entries(charErrors)
+    .filter(([char]) => char.trim() !== '') // a missed space isn't a key to drill
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, WEAKNESS_KEY_COUNT)
+    .map(([char]) => char);
+  if (worst.length === 0) return null;
+  // e.g. ['f','d'] -> "fff ddd fdf dfd fd df"
+  const triples = worst.map((c) => c.repeat(3)).join(' ');
+  const a = worst[0];
+  const b = worst[1] ?? worst[0];
+  const text = `${triples} ${a}${b}${a} ${b}${a}${b} ${a}${b} ${b}${a}`;
+  return { id: 'weakness-warmup', kind: 'keys', text };
+}
 
 /** Seconds to show the result before auto-advancing to the next lesson. */
 const AUTO_ADVANCE_SECONDS = 4;
@@ -25,19 +49,31 @@ export default function LessonRunner({ lesson }: LessonRunnerProps) {
   const { progress, recordResult } = useProgress();
   const [drillIndex, setDrillIndex] = useState(0);
   const [results, setResults] = useState<TypingStats[]>([]);
+  // A generated warm-up prepended on a failed retry; never persisted.
+  const [extraDrill, setExtraDrill] = useState<Drill | null>(null);
   const recordedRef = useRef(false);
   // Freeze the progress at mount so we can diff which badges this lesson earns.
   const [progressAtMount] = useState(progress);
 
-  const drill = lesson.drills[drillIndex];
-  const isLastDrill = drillIndex === lesson.drills.length - 1;
-  const lessonDone = results.length === lesson.drills.length;
+  // The drills actually shown: the optional warm-up followed by the lesson's own.
+  const drills = extraDrill ? [extraDrill, ...lesson.drills] : lesson.drills;
+  const drill = drills[drillIndex];
+  const isLastDrill = drillIndex === drills.length - 1;
+  const lessonDone = results.length === drills.length;
+  // The warm-up doesn't count toward the score, so drop it before aggregating.
+  const lessonResults = extraDrill ? results.slice(1) : results;
 
   function handleDrillComplete(stats: TypingStats) {
     setResults((prev) => [...prev, stats]);
   }
 
   function restart() {
+    // Build a targeted warm-up from the keys missed most this attempt, but only
+    // when the learner didn't pass — a pass needs no remediation.
+    const total = aggregateStats(lessonResults);
+    const passed =
+      total.wpm >= lesson.targetWpm && total.accuracy >= lesson.minAccuracy;
+    setExtraDrill(passed ? null : buildWeaknessDrill(total.charErrors));
     setResults([]);
     setDrillIndex(0);
   }
@@ -50,7 +86,7 @@ export default function LessonRunner({ lesson }: LessonRunnerProps) {
     }
     if (recordedRef.current) return;
     recordedRef.current = true;
-    const total = aggregateStats(results);
+    const total = aggregateStats(lessonResults);
     recordResult({
       lessonId: lesson.id,
       wpm: total.wpm,
@@ -58,10 +94,10 @@ export default function LessonRunner({ lesson }: LessonRunnerProps) {
       passed:
         total.wpm >= lesson.targetWpm && total.accuracy >= lesson.minAccuracy,
     });
-  }, [lessonDone, results, lesson, recordResult]);
+  }, [lessonDone, lessonResults, lesson, recordResult]);
 
   if (lessonDone) {
-    const total = aggregateStats(results);
+    const total = aggregateStats(lessonResults);
     const passed =
       total.wpm >= lesson.targetWpm && total.accuracy >= lesson.minAccuracy;
     const before = earnedBadgeIds(progressAtMount);
@@ -77,7 +113,7 @@ export default function LessonRunner({ lesson }: LessonRunnerProps) {
     return (
       <LessonSummary
         lesson={lesson}
-        results={results}
+        results={lessonResults}
         newBadges={newBadges}
         onRetry={restart}
       />
@@ -91,11 +127,11 @@ export default function LessonRunner({ lesson }: LessonRunnerProps) {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-          Øvelse {drillIndex + 1} af {lesson.drills.length} ·{' '}
+          Øvelse {drillIndex + 1} af {drills.length} ·{' '}
           {DRILL_KIND_LABEL[drill.kind]}
         </p>
         <div className="flex gap-1">
-          {lesson.drills.map((d, i) => (
+          {drills.map((d, i) => (
             <span
               key={d.id}
               className={[
@@ -116,6 +152,8 @@ export default function LessonRunner({ lesson }: LessonRunnerProps) {
         key={drill.id}
         text={drill.text}
         onComplete={handleDrillComplete}
+        // Prose wraps at real spaces; short key/word drills keep the ␣ glyph.
+        spaceGlyph={drill.kind === 'keys' || drill.kind === 'words'}
       />
 
       {justFinished && (
@@ -151,6 +189,11 @@ function LessonSummary({
   const passed =
     total.wpm >= lesson.targetWpm && total.accuracy >= lesson.minAccuracy;
   const nextLesson = getNextLesson(lesson.id);
+
+  // Rhythm is informational (not part of passing): 3 stars steady → 1 star jittery.
+  const rhythmStars =
+    total.rhythmScore >= 0.75 ? 3 : total.rhythmScore >= 0.5 ? 2 : 1;
+  const rhythmDisplay = '★'.repeat(rhythmStars) + '☆'.repeat(3 - rhythmStars);
 
   const autoAdvancing = passed && nextLesson !== undefined;
   const [staying, setStaying] = useState(false);
@@ -188,7 +231,7 @@ function LessonSummary({
             : 'Prøv igen og ram målet for at gå videre.'}
         </p>
 
-        <dl className="mx-auto mt-5 grid max-w-md grid-cols-2 gap-3 text-center">
+        <dl className="mx-auto mt-5 grid max-w-md grid-cols-2 gap-3 text-center sm:grid-cols-3">
           <SummaryStat
             label="WPM"
             value={wpm}
@@ -201,6 +244,7 @@ function LessonSummary({
             target={`${Math.round(lesson.minAccuracy * 100)}%`}
             met={total.accuracy >= lesson.minAccuracy}
           />
+          <RhythmStat stars={rhythmStars} display={rhythmDisplay} />
         </dl>
       </div>
 
@@ -261,6 +305,23 @@ function LessonSummary({
           </button>
         </p>
       )}
+    </div>
+  );
+}
+
+/** Informational rhythm rating — steadiness of typing, not a pass/fail target. */
+function RhythmStat({ stars, display }: { stars: number; display: string }) {
+  return (
+    <div className="rounded-xl bg-white/70 p-3 dark:bg-slate-900/40">
+      <dt className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+        Rytme
+      </dt>
+      <dd className="text-3xl font-bold tabular-nums text-amber-500">
+        {display}
+      </dd>
+      <p className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">
+        {stars === 3 ? 'jævn takt' : stars === 2 ? 'god takt' : 'ujævn takt'}
+      </p>
     </div>
   );
 }

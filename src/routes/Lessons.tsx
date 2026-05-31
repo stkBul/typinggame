@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LESSONS } from '../lessons/curriculum';
 import type { Lesson } from '../lessons/types';
 import { useProgress } from '../progress/context';
 import { isUnlocked } from '../progress/unlock';
+import { REVIEW_AFTER_MS } from '../progress/store';
 import type { LessonRecord } from '../progress/types';
 
 const LEVEL_TITLES: Record<number, string> = {
@@ -27,6 +29,8 @@ function groupByLevel(lessons: Lesson[]): [number, Lesson[]][] {
 export default function Lessons() {
   const { progress } = useProgress();
   const levels = groupByLevel(LESSONS);
+  // Read the clock once per mount so review badges stay stable across re-renders.
+  const [now] = useState(() => Date.now());
 
   return (
     <section className="space-y-8">
@@ -50,6 +54,7 @@ export default function Lessons() {
                   lesson={lesson}
                   record={progress.records[lesson.id]}
                   unlocked={isUnlocked(lesson.id, progress)}
+                  now={now}
                 />
               </li>
             ))}
@@ -64,12 +69,18 @@ function LessonCard({
   lesson,
   record,
   unlocked,
+  now,
 }: {
   lesson: Lesson;
   record: LessonRecord | undefined;
   unlocked: boolean;
+  now: number;
 }) {
   const passed = record?.passed ?? false;
+  const needsReview =
+    passed &&
+    record !== undefined &&
+    now - record.lastPlayedAt > REVIEW_AFTER_MS;
 
   const inner = (
     <>
@@ -77,6 +88,7 @@ function LessonCard({
         <h3 className="flex items-center gap-2 font-semibold">
           {!unlocked && <span aria-label="låst">🔒</span>}
           {passed && <span aria-label="bestået">✅</span>}
+          {needsReview && <span aria-label="klar til genopfriskning">🔄</span>}
           {lesson.title}
         </h3>
         <div className="flex gap-1">

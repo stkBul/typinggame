@@ -15,14 +15,24 @@ interface TypingTrainerProps {
   text: string;
   /** Called once when the drill is finished, with its final stats. */
   onComplete?: (stats: TypingStats) => void;
+  /**
+   * Show spaces as ␣ (good for short key/word drills) vs. real spaces, which
+   * let long prose wrap at word boundaries instead of overflowing.
+   */
+  spaceGlyph?: boolean;
 }
 
-export default function TypingTrainer({ text, onComplete }: TypingTrainerProps) {
+export default function TypingTrainer({
+  text,
+  onComplete,
+  spaceGlyph = true,
+}: TypingTrainerProps) {
   const { state, stats, nextChar, type, backspace } = useTypingEngine(text);
   const sound = useSound();
   const [focused, setFocused] = useState(false);
   const [layoutWarn, setLayoutWarn] = useState(false);
   const areaRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef<HTMLSpanElement>(null);
   const reportedRef = useRef(false);
 
   const nextTarget = nextChar ? findKey(nextChar) : null;
@@ -32,6 +42,11 @@ export default function TypingTrainer({ text, onComplete }: TypingTrainerProps) 
     reportedRef.current = false;
     areaRef.current?.focus();
   }, [text]);
+
+  // Keep the character being typed in view inside the scrollable box.
+  useEffect(() => {
+    cursorRef.current?.scrollIntoView({ block: 'nearest' });
+  }, [state.cursor]);
 
   // Report completion exactly once, with the frozen final stats, and celebrate.
   useEffect(() => {
@@ -134,7 +149,7 @@ export default function TypingTrainer({ text, onComplete }: TypingTrainerProps) 
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         className={[
-          'cursor-text rounded-xl border-2 bg-white p-4 font-mono text-2xl leading-relaxed tracking-wide outline-none dark:bg-slate-900',
+          'max-h-[40vh] cursor-text overflow-y-auto rounded-xl border-2 bg-white p-4 font-mono text-2xl leading-relaxed tracking-wide outline-none [overflow-wrap:anywhere] dark:bg-slate-900',
           focused
             ? 'border-indigo-500'
             : 'border-slate-200 dark:border-slate-700',
@@ -145,6 +160,8 @@ export default function TypingTrainer({ text, onComplete }: TypingTrainerProps) 
           typed={state.typed}
           cursor={state.cursor}
           focused={focused}
+          spaceGlyph={spaceGlyph}
+          currentRef={cursorRef}
         />
       </div>
 

@@ -1,4 +1,4 @@
-export type DrillKind = 'keys' | 'words' | 'sentence';
+export type DrillKind = 'keys' | 'words' | 'sentence' | 'passage';
 
 export interface Drill {
   id: string;

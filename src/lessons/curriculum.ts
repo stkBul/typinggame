@@ -14,8 +14,8 @@ export const LESSONS: Lesson[] = [
     targetWpm: 8,
     minAccuracy: 0.9,
     drills: [
-      { id: '1-keys-1', kind: 'keys', text: 'fff jjj fjf jfj ffj jjf fj jf' },
-      { id: '1-keys-2', kind: 'keys', text: 'jf fj jjf ffj fjfj jfjf fj jf' },
+      { id: '1-keys-1', kind: 'keys', text: 'fff jjj fjf jfj ffj jjf fj jf fjfj jfjf fff jjj fjfjfj jfjfjf' },
+      { id: '1-keys-2', kind: 'keys', text: 'jf fj jjf ffj fjfj jfjf fj jf jjj fff fjfj jfjf ffj jjf fjfj' },
     ],
   },
   {
@@ -27,8 +27,9 @@ export const LESSONS: Lesson[] = [
     targetWpm: 8,
     minAccuracy: 0.9,
     drills: [
-      { id: '2-keys-1', kind: 'keys', text: 'ddd kkk dkd kdk fdk jkd dk kd' },
-      { id: '2-keys-2', kind: 'keys', text: 'fjdk jkdf kdjf djkf dk kd fj jk' },
+      { id: '2-bridge-1', kind: 'keys', text: 'fj jf ff jj fjf jfj fjfj jfjf fff jjj jf ff jj fj fjfj jfjf' },
+      { id: '2-keys-1', kind: 'keys', text: 'ddd kkk dkd kdk fdk jkd dk kd fdd jkk ddk kkf djk kdf fdk jkd' },
+      { id: '2-keys-2', kind: 'keys', text: 'fjdk jkdf kdjf djkf dk kd fj jk fjdk kdfj djfk dkfj jkfd fdjk' },
     ],
   },
   {
@@ -40,8 +41,9 @@ export const LESSONS: Lesson[] = [
     targetWpm: 9,
     minAccuracy: 0.9,
     drills: [
-      { id: '3-keys-1', kind: 'keys', text: 'sss lll sls lsl fls jsl sl ls' },
-      { id: '3-keys-2', kind: 'keys', text: 'fjdksl lskdjf sldk fjsl sl ls' },
+      { id: '3-bridge-1', kind: 'keys', text: 'fjdk kdjf dkfj jkfd fjdk kdfj dkfj dk kd fj jk fjdk fjdk kdjf' },
+      { id: '3-keys-1', kind: 'keys', text: 'sss lll sls lsl fls jsl sl ls sss lll sld lks fjsl sldk lsdk sl' },
+      { id: '3-keys-2', kind: 'keys', text: 'fjdksl lskdjf sldk fjsl sl ls fjdksl lskdj sldkfj jfkdls sl ls' },
     ],
   },
   {
@@ -54,8 +56,9 @@ export const LESSONS: Lesson[] = [
     targetWpm: 10,
     minAccuracy: 0.9,
     drills: [
-      { id: '4-keys-1', kind: 'keys', text: 'aaa æææ aæa æaæ asdf jklæ asdf jklæ' },
-      { id: '4-words-1', kind: 'words', text: 'fald skal dal kald sæl læs fad sal' },
+      { id: '4-bridge-1', kind: 'keys', text: 'sl ls sls lsl fjsl sldk fjdksl lskdjf sld kls fls jsl sl ls sl' },
+      { id: '4-keys-1', kind: 'keys', text: 'aaa æææ aæa æaæ asdf jklæ asdf jklæ aaa æ a æ aæ æa aslf fjæ' },
+      { id: '4-words-1', kind: 'words', text: 'fald skal dal kald sæl læs fad sal ask lak flask dals fals lad' },
     ],
   },
   {
@@ -67,8 +70,9 @@ export const LESSONS: Lesson[] = [
     targetWpm: 10,
     minAccuracy: 0.92,
     drills: [
-      { id: '5-keys-1', kind: 'keys', text: 'ggg hhh ghg hgh fgh hjg asdfg hjklæ' },
-      { id: '5-words-1', kind: 'words', text: 'dag lag slag flag hals glas gas hæl' },
+      { id: '5-bridge-1', kind: 'words', text: 'fald skal dal kald sæl læs fad sal ask lak sald dal fals flask' },
+      { id: '5-keys-1', kind: 'keys', text: 'ggg hhh ghg hgh fgh hjg asdfg hjklæ ggg hhh ghfj hjdg fgh hjg' },
+      { id: '5-words-1', kind: 'words', text: 'dag lag slag flag hals glas gas hæl glad hald gals dag slag flag' },
     ],
   },
   {
@@ -80,8 +84,10 @@ export const LESSONS: Lesson[] = [
     targetWpm: 12,
     minAccuracy: 0.92,
     drills: [
-      { id: '6-words-1', kind: 'words', text: 'skal fald dag glas hals flag sæl læs' },
-      { id: '6-words-2', kind: 'words', text: 'ask gas lak dal sal hæl salg flask' },
+      { id: '6-words-1', kind: 'words', text: 'skal fald dag glas hals flag sæl læs glad gas ask lak flask dal' },
+      { id: '6-words-2', kind: 'words', text: 'ask gas lak dal sal hæl salg flask glad flag dal gals hals dag' },
+      { id: '6-words-3', kind: 'words', text: 'slag fald glas flag hal sad lad dag gas hæl læs sæl ask flask' },
+      { id: '6-words-4', kind: 'words', text: 'glad hald dags gal slag fals ask lad sad glas hal sæl flag dal' },
     ],
   },
   {
@@ -93,8 +99,9 @@ export const LESSONS: Lesson[] = [
     targetWpm: 12,
     minAccuracy: 0.92,
     drills: [
-      { id: '7-keys-1', kind: 'keys', text: 'eee iii eie iei die fie kei lei' },
-      { id: '7-words-1', kind: 'words', text: 'jeg hej leg del fed side ide ged dig sig' },
+      { id: '7-bridge-1', kind: 'words', text: 'dag slag hals gas glad flag sæl læs fald glas ask lak hæl dal' },
+      { id: '7-keys-1', kind: 'keys', text: 'eee iii eie iei die fie kei lei eee iii ied gie hei fie die iei' },
+      { id: '7-words-1', kind: 'words', text: 'jeg hej leg del fed side ide ged dig sig lie hej del fed side' },
     ],
   },
   {
@@ -106,9 +113,10 @@ export const LESSONS: Lesson[] = [
     targetWpm: 14,
     minAccuracy: 0.93,
     drills: [
-      { id: '8-keys-1', kind: 'keys', text: 'rrr uuu rur uru fru jur dru kur' },
-      { id: '8-words-1', kind: 'words', text: 'rude sur kur rar gul rul frue ur' },
-      { id: '8-sentence-1', kind: 'sentence', text: 'jeg er glad du er sej jeg ser dig' },
+      { id: '8-bridge-1', kind: 'words', text: 'jeg hej leg del fed side ide ged dig sig lie hej del fed side' },
+      { id: '8-keys-1', kind: 'keys', text: 'rrr uuu rur uru fru jur dru kur rrr uuu ruf jud dru lur sru ur' },
+      { id: '8-words-1', kind: 'words', text: 'rude sur kur rar gul rul frue ur urer sur kur rude frue gul' },
+      { id: '8-sentence-1', kind: 'sentence', text: 'jeg er glad du er sej jeg ser dig her i dag' },
     ],
   },
   {
@@ -121,9 +129,10 @@ export const LESSONS: Lesson[] = [
     targetWpm: 14,
     minAccuracy: 0.93,
     drills: [
-      { id: '9-keys-1', kind: 'keys', text: 'ttt yyy tyt yty fty jyt rty uyt' },
-      { id: '9-words-1', kind: 'words', text: 'tyr ret let tre fryd dyr lyd syd hyl flyt' },
-      { id: '9-sentence-1', kind: 'sentence', text: 'jeg er glad du er tryg' },
+      { id: '9-bridge-1', kind: 'words', text: 'rude sur kur gul rul frue ur urer rude sur kur gul rul frue' },
+      { id: '9-keys-1', kind: 'keys', text: 'ttt yyy tyt yty fty jyt rty uyt ttt yyy tft jyj rty uyt tyr ty' },
+      { id: '9-words-1', kind: 'words', text: 'tyr ret let tre fryd dyr lyd syd hyl flyt tryl dyrt tyre lyde' },
+      { id: '9-sentence-1', kind: 'sentence', text: 'jeg er glad du er tryg du er fri i dag jeg er sej' },
     ],
   },
   {
@@ -135,9 +144,10 @@ export const LESSONS: Lesson[] = [
     targetWpm: 15,
     minAccuracy: 0.93,
     drills: [
-      { id: '10-keys-1', kind: 'keys', text: 'ooo www owo wow tow rod sok fok' },
-      { id: '10-words-1', kind: 'words', text: 'ord sol stol kold told fjord ros god ko lo' },
-      { id: '10-sentence-1', kind: 'sentence', text: 'du er god og jeg er glad' },
+      { id: '10-bridge-1', kind: 'words', text: 'tyr ret let tre fryd dyr lyd syd hyl flyt tyre dyrt tryl lyde' },
+      { id: '10-keys-1', kind: 'keys', text: 'ooo www owo wow tow rod sok fok ooo www ord sol kold tok sol ow' },
+      { id: '10-words-1', kind: 'words', text: 'ord sol stol kold told fjord ros god ko lo rod fold sod tolk' },
+      { id: '10-sentence-1', kind: 'sentence', text: 'du er god og jeg er glad for det her i dag' },
     ],
   },
   {
@@ -149,9 +159,10 @@ export const LESSONS: Lesson[] = [
     targetWpm: 15,
     minAccuracy: 0.93,
     drills: [
-      { id: '11-keys-1', kind: 'keys', text: 'qqq ppp qpq pqp pad par qua que' },
-      { id: '11-words-1', kind: 'words', text: 'pil pose post pas pris pude kop top spar april' },
-      { id: '11-sentence-1', kind: 'sentence', text: 'peter har et stort kort' },
+      { id: '11-bridge-1', kind: 'words', text: 'ord sol stol kold told fjord ros god ko lo rod fold sod tolk' },
+      { id: '11-keys-1', kind: 'keys', text: 'qqq ppp qpq pqp pad par qua que qqq ppp spa pil pud pot kop pq' },
+      { id: '11-words-1', kind: 'words', text: 'pil pose post pas pris pude kop top spar april pol put pris top' },
+      { id: '11-sentence-1', kind: 'sentence', text: 'peter har et stort kort og et godt hus her' },
     ],
   },
   {
@@ -163,9 +174,10 @@ export const LESSONS: Lesson[] = [
     targetWpm: 16,
     minAccuracy: 0.92,
     drills: [
-      { id: '12-keys-1', kind: 'keys', text: 'ååå øøø åøå øåø går får øre øst' },
-      { id: '12-words-1', kind: 'words', text: 'på så går står får øl sø rød sød løs' },
-      { id: '12-sentence-1', kind: 'sentence', text: 'du går først og jeg går sidst' },
+      { id: '12-bridge-1', kind: 'words', text: 'pil pose post pas pris pude kop top spar april pol put kop top' },
+      { id: '12-keys-1', kind: 'keys', text: 'ååå øøø åøå øåø går får øre øst ååå øøø rå få gå på stå rød øl' },
+      { id: '12-words-1', kind: 'words', text: 'på så går står får øl sø rød sød løs åle øre råd frø grøft' },
+      { id: '12-sentence-1', kind: 'sentence', text: 'du går først og jeg går sidst og det er godt' },
     ],
   },
   {
@@ -177,9 +189,11 @@ export const LESSONS: Lesson[] = [
     targetWpm: 18,
     minAccuracy: 0.93,
     drills: [
-      { id: '13-words-1', kind: 'words', text: 'fjord skør gæld høj tør lås pløj støj fløde stærk' },
-      { id: '13-sentence-1', kind: 'sentence', text: 'jeg er glad og du er sød' },
-      { id: '13-sentence-2', kind: 'sentence', text: 'håret står lige op' },
+      { id: '13-words-1', kind: 'words', text: 'fjord skør gæld høj tør lås pløj støj fløde stærk rød sød grøft' },
+      { id: '13-words-2', kind: 'words', text: 'pris sport syd folk stol glad rød sød spørg tro løs gør går' },
+      { id: '13-sentence-1', kind: 'sentence', text: 'jeg er glad og du er sød og du går tur i dag her ude' },
+      { id: '13-sentence-2', kind: 'sentence', text: 'håret står lige op og øjet ser godt' },
+      { id: '13-sentence-3', kind: 'sentence', text: 'per går til sport og pia tager det roligt' },
     ],
   },
   {
@@ -191,9 +205,10 @@ export const LESSONS: Lesson[] = [
     targetWpm: 16,
     minAccuracy: 0.93,
     drills: [
-      { id: '14-keys-1', kind: 'keys', text: 'nnn mmm nmn mnm fan man min mon' },
-      { id: '14-words-1', kind: 'words', text: 'man men min mor mod nu nem mand måne morgen' },
-      { id: '14-sentence-1', kind: 'sentence', text: 'min mor er en sød mand' },
+      { id: '14-bridge-1', kind: 'sentence', text: 'jeg er glad og du er sød og det er godt at lære at skøjte her' },
+      { id: '14-keys-1', kind: 'keys', text: 'nnn mmm nmn mnm fan man min mon nnn mmm nan mun fon jmn min mon' },
+      { id: '14-words-1', kind: 'words', text: 'man men min mor mod nu nem mand måne morgen nul mund mene min' },
+      { id: '14-sentence-1', kind: 'sentence', text: 'min mor er en god mand og hun er nem at tale med' },
     ],
   },
   {
@@ -205,9 +220,10 @@ export const LESSONS: Lesson[] = [
     targetWpm: 16,
     minAccuracy: 0.93,
     drills: [
-      { id: '15-keys-1', kind: 'keys', text: 'vvv bbb vbv bvb van bil bog ven' },
-      { id: '15-words-1', kind: 'words', text: 'ven bil bog bo brev vand over leve liv være' },
-      { id: '15-sentence-1', kind: 'sentence', text: 'vi bor ved en god vej' },
+      { id: '15-bridge-1', kind: 'words', text: 'man men min mor mod nu nem mand måne morgen nul mund mene min' },
+      { id: '15-keys-1', kind: 'keys', text: 'vvv bbb vbv bvb van bil bog ven vvv bbb vib brev ven vand bog vb' },
+      { id: '15-words-1', kind: 'words', text: 'ven bil bog bo brev vand over leve liv være ved bur bæk bryd' },
+      { id: '15-sentence-1', kind: 'sentence', text: 'vi bor ved en god vej og vi er gode venner her' },
     ],
   },
   {
@@ -220,9 +236,10 @@ export const LESSONS: Lesson[] = [
     targetWpm: 15,
     minAccuracy: 0.92,
     drills: [
-      { id: '16-keys-1', kind: 'keys', text: 'ccc ,,, c,c ,c, ca, co, ce, ci,' },
-      { id: '16-words-1', kind: 'words', text: 'cykel cirka cafe cola disco celle' },
-      { id: '16-sentence-1', kind: 'sentence', text: 'jeg er glad, og du er sød' },
+      { id: '16-bridge-1', kind: 'words', text: 'ven bil bog bo brev vand over leve liv være ved bur bæk bryd' },
+      { id: '16-keys-1', kind: 'keys', text: 'ccc ,,, c,c ,c, ca, co, ce, ci, ccc ,,, cel, vc, bc, ca, co, ce,' },
+      { id: '16-words-1', kind: 'words', text: 'cykel cirka cafe cola disco celle cirkus celle, disco, cafe, cykel,' },
+      { id: '16-sentence-1', kind: 'sentence', text: 'jeg er glad, og du er sød, og vi er gode venner her' },
     ],
   },
   {
@@ -235,9 +252,15 @@ export const LESSONS: Lesson[] = [
     targetWpm: 15,
     minAccuracy: 0.92,
     drills: [
-      { id: '17-keys-1', kind: 'keys', text: 'xxx ... x.x .x. ax. ox. ex. ix.' },
-      { id: '17-words-1', kind: 'words', text: 'taxa sax max boks xylofon hexe' },
-      { id: '17-sentence-1', kind: 'sentence', text: 'vi tog en taxa hjem.' },
+      { id: '17-bridge-1', kind: 'sentence', text: 'jeg er glad, og du er sød, og vi er gode venner her i dag' },
+      { id: '17-keys-1', kind: 'keys', text: 'xxx ... x.x .x. ax. ox. ex. ix. xxx ... sex. box. vax. ox. x.x.' },
+      { id: '17-words-1', kind: 'words', text: 'taxa sax max boks xylofon hexe max. taxa. sax. boks. hex. max.' },
+      { id: '17-sentence-1', kind: 'sentence', text: 'vi tog en taxa hjem. det var godt. vi er glade.' },
+      {
+        id: '17-passage-1',
+        kind: 'passage',
+        text: 'vi gik en lang tur i skoven og fandt en gammel hule. der var mørkt og koldt, men vi var ikke bange. bagefter løb vi hjem og spiste varm mad. vi var trætte men glade.',
+      },
     ],
   },
   {
@@ -250,9 +273,15 @@ export const LESSONS: Lesson[] = [
     targetWpm: 15,
     minAccuracy: 0.92,
     drills: [
-      { id: '18-keys-1', kind: 'keys', text: 'zzz --- z-z -z- za- zo- ze- zi-' },
-      { id: '18-words-1', kind: 'words', text: 'zebra zone pizza jazz zoo zigzag' },
-      { id: '18-sentence-1', kind: 'sentence', text: 'vi spiste pizza i går - det var godt.' },
+      { id: '18-bridge-1', kind: 'sentence', text: 'vi tog en taxa hjem. max boks sax hex. det var godt at leve.' },
+      { id: '18-keys-1', kind: 'keys', text: 'zzz --- z-z -z- za- zo- ze- zi- zzz --- zen- zig-zag zo- zz-zz' },
+      { id: '18-words-1', kind: 'words', text: 'zebra zone pizza jazz zoo zigzag zebra-zone jazz-bar zap zigzag' },
+      { id: '18-sentence-1', kind: 'sentence', text: 'vi spiste pizza i går - det var godt. jazz er den bedste musik.' },
+      {
+        id: '18-passage-1',
+        kind: 'passage',
+        text: 'en zebra og en giraf bor i en stor zoo. om morgenen får de frisk mad - frugt, blade og korn. en lille dreng så på dem og lo højt. det var en dejlig dag i den varme zoo.',
+      },
     ],
   },
   {
@@ -264,13 +293,20 @@ export const LESSONS: Lesson[] = [
     targetWpm: 20,
     minAccuracy: 0.93,
     drills: [
-      { id: '19-words-1', kind: 'words', text: 'hjælp dejlig kærlig brød smuk fjern lykke voksen' },
+      { id: '19-words-1', kind: 'words', text: 'hjælp dejlig kærlig brød smuk fjern lykke voksen zebra xylofon' },
       {
         id: '19-sentence-1',
         kind: 'sentence',
         text: 'quizdeltagerne spiste jordbær med fløde, mens cirkusklovnen walther spillede på xylofon.',
       },
-      { id: '19-sentence-2', kind: 'sentence', text: 'han bor i en stor by, men hun bor på landet.' },
+      { id: '19-sentence-2', kind: 'sentence', text: 'han bor i en stor by, men hun bor på landet ved en smuk skov.' },
+      { id: '19-sentence-3', kind: 'sentence', text: 'den gode ven tog en taxa hjem - det var en dejlig og varm dag.' },
+      { id: '19-sentence-4', kind: 'sentence', text: 'vi spiste brød, drak juice og gik en lang tur i den smukke park.' },
+      {
+        id: '19-passage-1',
+        kind: 'passage',
+        text: 'den hurtige brune ræv sprang over den dovne hund. quizzen var svær, men jeg klarede den til sidst. bagefter spiste vi jordbær med fløde og drak kold juice ude i den smukke have.',
+      },
     ],
   },
   {
@@ -283,9 +319,15 @@ export const LESSONS: Lesson[] = [
     targetWpm: 14,
     minAccuracy: 0.92,
     drills: [
-      { id: '20-keys-1', kind: 'keys', text: 'Aa Ss Dd Ff Gg Qq Ww Ee Rr Tt Zz Xx Cc Vv Bb' },
-      { id: '20-words-1', kind: 'words', text: 'Anna Bo Carl David Erik Frank Gert Sara Tina Vera' },
-      { id: '20-words-2', kind: 'words', text: 'Zara Xenia Walther Quist Rune' },
+      { id: '20-bridge-1', kind: 'sentence', text: 'vi spiste pizza i går - det var godt. jazz er dejlig musik.' },
+      { id: '20-keys-1', kind: 'keys', text: 'Aa Ss Dd Ff Gg Qq Ww Ee Rr Tt Zz Xx Cc Vv Bb Aa Ss Dd Ff Gg' },
+      { id: '20-words-1', kind: 'words', text: 'Anna Bo Carl David Erik Frank Gert Sara Tina Vera Bo Anna Carl' },
+      { id: '20-words-2', kind: 'words', text: 'Zara Xenia Walther Quist Rune Vera Sara Tina Frank Gert Bo' },
+      {
+        id: '20-passage-1',
+        kind: 'passage',
+        text: 'Bo og Carl gik en tur i skoven. Anna og Erik kom med dem. David fandt en stor sten, og Frank tog et billede af den. Sara var rigtig glad. Tina og Vera grinede hele vejen hjem.',
+      },
     ],
   },
   {
@@ -298,9 +340,15 @@ export const LESSONS: Lesson[] = [
     targetWpm: 14,
     minAccuracy: 0.92,
     drills: [
-      { id: '21-keys-1', kind: 'keys', text: 'Hh Jj Kk Ll Yy Uu Ii Oo Pp Nn Mm Åå Øø Ææ' },
-      { id: '21-words-1', kind: 'words', text: 'Hans Ida Jens Kira Lars Mette Niels Ole Pia Ulla' },
-      { id: '21-words-2', kind: 'words', text: 'Åse Ørsted Ærø Møn Yrsa' },
+      { id: '21-bridge-1', kind: 'words', text: 'Anna Bo Carl David Erik Frank Sara Tina Vera Zara Xenia Rune' },
+      { id: '21-keys-1', kind: 'keys', text: 'Hh Jj Kk Ll Yy Uu Ii Oo Pp Nn Mm Åå Øø Ææ Hh Jj Kk Ll Yy Uu' },
+      { id: '21-words-1', kind: 'words', text: 'Hans Ida Jens Kira Lars Mette Niels Ole Pia Ulla Hans Ida Lars' },
+      { id: '21-words-2', kind: 'words', text: 'Åse Ørsted Ærø Møn Yrsa Åse Ørsted Yrsa Møn Ærø Niels Ole' },
+      {
+        id: '21-passage-1',
+        kind: 'passage',
+        text: 'Hans og Ida bor i et stort hus. Jens og Kira leger ude i haven. Lars og Mette laver god mad i køkkenet. Niels og Ole spiller bold, mens Pia og Ulla synger en glad sang.',
+      },
     ],
   },
   {
@@ -312,9 +360,16 @@ export const LESSONS: Lesson[] = [
     targetWpm: 18,
     minAccuracy: 0.93,
     drills: [
-      { id: '22-sentence-1', kind: 'sentence', text: 'Jeg hedder Anna og jeg bor i Aarhus.' },
-      { id: '22-sentence-2', kind: 'sentence', text: 'Min ven Erik spiller fodbold hver dag.' },
-      { id: '22-sentence-3', kind: 'sentence', text: 'København er en stor by i Danmark.' },
+      { id: '22-bridge-1', kind: 'words', text: 'Hans Ida Anna Bo Carl Lars Mette Niels Ole Pia Ulla Åse Yrsa' },
+      { id: '22-sentence-1', kind: 'sentence', text: 'Jeg hedder Anna og jeg bor i Aarhus med min familie.' },
+      { id: '22-sentence-2', kind: 'sentence', text: 'Min ven Erik spiller fodbold hver dag efter skole.' },
+      { id: '22-sentence-3', kind: 'sentence', text: 'København er en stor by i Danmark med mange gode steder.' },
+      { id: '22-sentence-4', kind: 'sentence', text: 'Lars og Mette bor på Møn, men Niels bor i Aarhus.' },
+      {
+        id: '22-passage-1',
+        kind: 'passage',
+        text: 'Min familie bor i Aarhus, en hyggelig by i Danmark. Om sommeren tager vi til stranden, og om vinteren står vi på ski i Norge. Jeg elsker at rejse rundt med Mette og Niels.',
+      },
     ],
   },
   {
@@ -326,9 +381,15 @@ export const LESSONS: Lesson[] = [
     targetWpm: 12,
     minAccuracy: 0.9,
     drills: [
-      { id: '23-keys-1', kind: 'keys', text: '444 555 666 777 456 567 4567 7654' },
-      { id: '23-keys-2', kind: 'keys', text: 'ff44 jj77 dd55 kk66 f4j7 d5k6' },
-      { id: '23-sentence-1', kind: 'sentence', text: 'Klokken er 5 og 6 og 7.' },
+      { id: '23-bridge-1', kind: 'sentence', text: 'Jeg hedder Lars og bor i Aarhus med min gode ven Niels.' },
+      { id: '23-keys-1', kind: 'keys', text: '444 555 666 777 456 567 4567 7654 444 555 456 567 4556 7765 456' },
+      { id: '23-keys-2', kind: 'keys', text: 'ff44 jj77 dd55 kk66 f4j7 d5k6 ff4 jj7 dd5 kk6 4567 7654 f4j7' },
+      { id: '23-sentence-1', kind: 'sentence', text: 'Klokken er 5 og vi er 6 og der er 7 stole.' },
+      {
+        id: '23-passage-1',
+        kind: 'passage',
+        text: 'Klokken er 7 om morgenen. Vi har 5 timer i skole og 4 fag i dag. I frikvarteret spiller 6 elever bold, mens 7 andre sidder og snakker. Det bliver helt sikkert en god dag.',
+      },
     ],
   },
   {
@@ -340,9 +401,15 @@ export const LESSONS: Lesson[] = [
     targetWpm: 12,
     minAccuracy: 0.9,
     drills: [
-      { id: '24-keys-1', kind: 'keys', text: '333 888 222 999 38 83 29 92 2389' },
-      { id: '24-keys-2', kind: 'keys', text: 'dd33 kk88 ss22 ll99 d3k8 s2l9' },
-      { id: '24-sentence-1', kind: 'sentence', text: 'Vi er 8 i klassen og 2 er syge.' },
+      { id: '24-bridge-1', kind: 'keys', text: '444 555 666 777 456 567 4567 7654 ff44 jj77 f4j7 d5k6 4567' },
+      { id: '24-keys-1', kind: 'keys', text: '333 888 222 999 38 83 29 92 2389 333 888 23 89 38 92 2389 9283' },
+      { id: '24-keys-2', kind: 'keys', text: 'dd33 kk88 ss22 ll99 d3k8 s2l9 dd3 kk8 ss2 ll9 3829 9283 d3k8' },
+      { id: '24-sentence-1', kind: 'sentence', text: 'Vi er 8 i klassen og 2 er syge, men 3 er friske.' },
+      {
+        id: '24-passage-1',
+        kind: 'passage',
+        text: 'Vi er 28 elever i klassen, men 3 er syge i dag. Bussen kommer klokken 8 og igen 9. Min ven har 7 søskende og bor i hus nummer 32. Vi mødes ved skolen klokken 6 og leger.',
+      },
     ],
   },
   {
@@ -354,10 +421,16 @@ export const LESSONS: Lesson[] = [
     targetWpm: 12,
     minAccuracy: 0.9,
     drills: [
-      { id: '25-keys-1', kind: 'keys', text: '111 000 +++ 10 01 100 010 1+0 0+1' },
-      { id: '25-keys-2', kind: 'keys', text: 'aa11 1+1 0+0 100 1010 10+10' },
+      { id: '25-bridge-1', kind: 'keys', text: '333 888 222 999 38 83 29 92 2389 9283 dd33 kk88 3829 9283' },
+      { id: '25-keys-1', kind: 'keys', text: '111 000 +++ 10 01 100 010 1+0 0+1 111 000 10+1 0+10 100+0 1+0' },
+      { id: '25-keys-2', kind: 'keys', text: 'aa11 1+1 0+0 100 1010 10+10 aa1 1+0 0+1 100 1010 10+1 100 0+1' },
       { id: '25-sentence-1', kind: 'sentence', text: 'Jeg har 10 fingre og 10 tæer.' },
-      { id: '25-sentence-2', kind: 'sentence', text: '1 + 1 er 2 og 2 + 2 er 4.' },
+      { id: '25-sentence-2', kind: 'sentence', text: '1 + 1 er 2 og 2 + 2 er 4 og 5 + 5 er 10.' },
+      {
+        id: '25-passage-1',
+        kind: 'passage',
+        text: 'Jeg har 10 fingre og 10 tæer. 5 + 5 er 10, og 20 + 20 er 40. Vi var 100 elever til fest klokken 18. Min mor fyldte 40 år, og min far blev 45 i sidste uge. Vi spiste kage.',
+      },
     ],
   },
   {
@@ -369,9 +442,15 @@ export const LESSONS: Lesson[] = [
     targetWpm: 16,
     minAccuracy: 0.92,
     drills: [
-      { id: '26-keys-1', kind: 'keys', text: '10 20 30 40 50 60 70 80 90 100' },
-      { id: '26-sentence-1', kind: 'sentence', text: 'Der er 365 dage i et år.' },
-      { id: '26-sentence-2', kind: 'sentence', text: 'Vi mødtes klokken 8 og spiste klokken 9.' },
+      { id: '26-keys-1', kind: 'keys', text: '10 20 30 40 50 60 70 80 90 100 200 300 400 500 1000 2000 3000' },
+      { id: '26-sentence-1', kind: 'sentence', text: 'Der er 365 dage i et år og 52 uger.' },
+      { id: '26-sentence-2', kind: 'sentence', text: 'Vi mødtes klokken 8 og spiste klokken 9 og gik hjem klokken 10.' },
+      { id: '26-sentence-3', kind: 'sentence', text: 'Der var 24 elever i klassen og 3 var syge i dag.' },
+      {
+        id: '26-passage-1',
+        kind: 'passage',
+        text: 'Der er 365 dage i et år og 52 uger. Vi mødtes klokken 8 og spiste klokken 9. I klassen er der 24 elever, og 3 var syge i dag. Bussen kom 15 minutter for sent om morgenen.',
+      },
     ],
   },
   {
@@ -384,10 +463,16 @@ export const LESSONS: Lesson[] = [
     targetWpm: 10,
     minAccuracy: 0.9,
     drills: [
-      { id: '27-keys-1', kind: 'keys', text: 'a: o; e_ i* u: :; _* :: ;; **' },
-      { id: '27-keys-2', kind: 'keys', text: "fil_navn 3*4 det' her' klokken_5" },
-      { id: '27-sentence-1', kind: 'sentence', text: 'Klokken er 12:30; vi ses.' },
-      { id: '27-sentence-2', kind: 'sentence', text: 'Jeg kom; du gik: vi mødtes.' },
+      { id: '27-bridge-1', kind: 'sentence', text: 'Vi mødtes klokken 8 og spiste klokken 9. Der var 24 elever.' },
+      { id: '27-keys-1', kind: 'keys', text: "a: o; e_ i* u: :; _* :: ;; ** a:b o;p e_r i*t u:y :;_* ::;;" },
+      { id: '27-keys-2', kind: 'keys', text: "fil_navn 3*4 det' her' klokken_5 fil_2 abc_def 5*6 it's" },
+      { id: '27-sentence-1', kind: 'sentence', text: 'Klokken er 12:30; vi ses igen.' },
+      { id: '27-sentence-2', kind: 'sentence', text: 'Jeg kom; du gik: vi mødtes bagefter.' },
+      {
+        id: '27-passage-1',
+        kind: 'passage',
+        text: 'Klokken er 12:30; vi skal mødes ved skolen. Husk din taske, din bog og dit penalhus. Filen hedder mit_projekt og er klar nu. Vi ses snart; det bliver en rigtig sjov dag.',
+      },
     ],
   },
   {
@@ -399,9 +484,15 @@ export const LESSONS: Lesson[] = [
     targetWpm: 12,
     minAccuracy: 0.9,
     drills: [
-      { id: '28-keys-1', kind: 'keys', text: 'ja! nej! hvad? hvor? !! ?? !? ?!' },
-      { id: '28-sentence-1', kind: 'sentence', text: 'Hej! Hvordan går det?' },
-      { id: '28-sentence-2', kind: 'sentence', text: 'Er du klar? Ja, jeg er klar!' },
+      { id: '28-bridge-1', kind: 'sentence', text: "Klokken er 12:30; vi ses. fil_navn 3*4 det' her klokken_5." },
+      { id: '28-keys-1', kind: 'keys', text: 'ja! nej! hvad? hvor? !! ?? !? ?! ja! nej! hvad? hvor? ja! !?' },
+      { id: '28-sentence-1', kind: 'sentence', text: 'Hej! Hvordan går det? Jeg er glad!' },
+      { id: '28-sentence-2', kind: 'sentence', text: 'Er du klar? Ja, jeg er klar! Vi starter nu!' },
+      {
+        id: '28-passage-1',
+        kind: 'passage',
+        text: 'Hej! Hvordan går det med dig? Jeg har det rigtig godt. Skal vi mødes i morgen? Det kunne være sjovt! Husk din bog og din taske. Vi ses klokken 10, og så leger vi hele dagen!',
+      },
     ],
   },
   {
@@ -413,9 +504,15 @@ export const LESSONS: Lesson[] = [
     targetWpm: 10,
     minAccuracy: 0.9,
     drills: [
-      { id: '29-keys-1', kind: 'keys', text: '(a) (b) 7/8 2=2 "ja" () // == ""' },
-      { id: '29-sentence-1', kind: 'sentence', text: '2 + 2 = 4 (det er let).' },
-      { id: '29-sentence-2', kind: 'sentence', text: 'Hun sagde "hej" og smilede.' },
+      { id: '29-bridge-1', kind: 'sentence', text: 'Hej! Hvordan går det? Er du klar? Ja, jeg er klar!' },
+      { id: '29-keys-1', kind: 'keys', text: '(a) (b) 7/8 2=2 "ja" () // == "" (x) (y) 9/10 3=3 "nej" ()' },
+      { id: '29-sentence-1', kind: 'sentence', text: '2 + 2 = 4 (det er let) og 3 + 3 = 6.' },
+      { id: '29-sentence-2', kind: 'sentence', text: 'Hun sagde "hej" og smilede til os alle.' },
+      {
+        id: '29-passage-1',
+        kind: 'passage',
+        text: 'Hun sagde "hej" og smilede til alle. Vi regnede det svære stykke: 2 + 2 = 4 (det er nemt). Bussen kører 7/8 af vejen til byen. "Kom nu!" råbte han glad og vinkede til os.',
+      },
     ],
   },
   {
@@ -427,9 +524,15 @@ export const LESSONS: Lesson[] = [
     targetWpm: 8,
     minAccuracy: 0.9,
     drills: [
-      { id: '30-keys-1', kind: 'keys', text: '## ¤¤ %% && ½½ §§ << >> #5 50% a&b 5<6 6>5' },
+      { id: '30-bridge-1', kind: 'sentence', text: '2 + 2 = 4 (let). Hun sagde "hej" og smilede. 7/8 er godt!' },
+      { id: '30-keys-1', kind: 'keys', text: '## ¤¤ %% && ½½ §§ << >> #5 50% a&b 5<6 6>5 §2 ½ liter #10 ¤¤' },
       { id: '30-sentence-1', kind: 'sentence', text: 'Tilbud: 50% i dag & i morgen!' },
       { id: '30-sentence-2', kind: 'sentence', text: 'Se § 4, køb ½ liter til værelse #2 for 99 ¤.' },
+      {
+        id: '30-passage-1',
+        kind: 'passage',
+        text: 'Tilbud i dag: 50% på alt & gratis fragt! Køb ½ liter mælk til 9 ¤ i butik #3. Se § 5 i reglerne, hvis du er i tvivl. Husk: 5 < 6 og 9 > 3. Det er en super god handel!',
+      },
     ],
   },
   {
@@ -448,6 +551,12 @@ export const LESSONS: Lesson[] = [
       },
       { id: '31-sentence-2', kind: 'sentence', text: 'Bestil 3 pizzaer (50% rabat) inden kl. 18:30!' },
       { id: '31-sentence-3', kind: 'sentence', text: 'Pris: 199 kr. = 2 stk. & gratis fragt!' },
+      { id: '31-sentence-4', kind: 'sentence', text: 'Ring #42 hvis 5 < 6 & 9 > 3, men tjek § 5 (½ side) til 99 ¤.' },
+      {
+        id: '31-passage-1',
+        kind: 'passage',
+        text: 'Quizdeltagerne (alle 12 stk.) spiste jordbær til 50% rabat! "Det var dejligt", sagde Walther glad. Bestil #5 inden kl. 18:30, og betal 199 kr. = 2 x 99 + 1. Tak for handlen!',
+      },
     ],
   },
 ];

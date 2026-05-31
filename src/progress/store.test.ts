@@ -1,10 +1,14 @@
 import { describe, it, expect } from 'vitest';
 import {
   CURRENT_VERSION,
+  REVIEW_AFTER_MS,
   applyResult,
   createEmptyProgress,
+  lessonsNeedingReview,
   parseProgress,
 } from './store';
+import type { LessonRecord, ProgressData } from './types';
+import { emptyStreak } from './streak';
 
 describe('applyResult', () => {
   it('creates a record for a new lesson', () => {
@@ -56,6 +60,60 @@ describe('applyResult', () => {
       passed: false,
     });
     expect(data.records['1'].passed).toBe(true);
+  });
+});
+
+describe('lessonsNeedingReview', () => {
+  const NOW = 1_000_000_000_000;
+
+  function record(over: Partial<LessonRecord> & { lessonId: string }): LessonRecord {
+    return {
+      bestWpm: 30,
+      bestAccuracy: 0.95,
+      passed: true,
+      attempts: 1,
+      lastPlayedAt: NOW,
+      ...over,
+    };
+  }
+
+  function progressWith(records: LessonRecord[]): ProgressData {
+    return {
+      version: CURRENT_VERSION,
+      records: Object.fromEntries(records.map((r) => [r.lessonId, r])),
+      streak: emptyStreak(),
+    };
+  }
+
+  it('excludes lessons practised recently', () => {
+    const data = progressWith([
+      record({ lessonId: '1', lastPlayedAt: NOW - 1000 }),
+    ]);
+    expect(lessonsNeedingReview(data, NOW)).toEqual([]);
+  });
+
+  it('includes passed lessons gone stale', () => {
+    const data = progressWith([
+      record({ lessonId: '1', lastPlayedAt: NOW - REVIEW_AFTER_MS - 1 }),
+    ]);
+    expect(lessonsNeedingReview(data, NOW)).toEqual(['1']);
+  });
+
+  it('excludes unpassed lessons even when stale', () => {
+    const data = progressWith([
+      record({ lessonId: '1', passed: false, lastPlayedAt: NOW - REVIEW_AFTER_MS - 1 }),
+    ]);
+    expect(lessonsNeedingReview(data, NOW)).toEqual([]);
+  });
+
+  it('orders the shakiest pass (smallest WPM margin) first', () => {
+    // Lesson 1 target 8 WPM, lesson 2 target 8 WPM. Lesson 2 barely passed.
+    const stale = NOW - REVIEW_AFTER_MS - 1;
+    const data = progressWith([
+      record({ lessonId: '1', bestWpm: 40, lastPlayedAt: stale }),
+      record({ lessonId: '2', bestWpm: 9, lastPlayedAt: stale }),
+    ]);
+    expect(lessonsNeedingReview(data, NOW)).toEqual(['2', '1']);
   });
 });
 

@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useProgress } from '../progress/context';
 import { useSettings } from '../settings/context';
 import { nextLessonId } from '../progress/unlock';
+import { lessonsNeedingReview } from '../progress/store';
+import { getLesson } from '../lessons/curriculum';
 import { PASSAGES } from '../practice/passages';
 import DrillText from '../components/DrillText';
 
@@ -17,6 +20,10 @@ export default function Home() {
   const resumeId = nextLessonId(progress);
   const hasStarted = Object.keys(progress.records).length > 0;
   const learnTo = `/lesson/${hasStarted ? resumeId : '1'}`;
+  // Top-priority lesson due for a spaced-repetition refresher, if any. Read the
+  // clock once per mount so the prompt stays stable across re-renders.
+  const [now] = useState(() => Date.now());
+  const reviewLesson = getLesson(lessonsNeedingReview(progress, now)[0]);
 
   return (
     <section className="relative">
@@ -58,6 +65,16 @@ export default function Home() {
         >
           Se alle lektioner
         </Link>
+
+        {reviewLesson && (
+          <Link
+            to={`/lesson/${reviewLesson.id}`}
+            className="flex items-center gap-2 rounded-xl border border-amber-300 bg-amber-50/90 px-4 py-2.5 text-sm font-medium text-amber-800 shadow-sm backdrop-blur transition-colors hover:bg-amber-100 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200"
+          >
+            <span aria-hidden>🔄</span>
+            Klar til genopfriskning: {reviewLesson.title} →
+          </Link>
+        )}
       </div>
     </section>
   );

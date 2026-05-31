@@ -15,7 +15,50 @@ describe('computeStats', () => {
       correct: 0,
       total: 0,
       elapsedMs: 0,
+      charErrors: {},
+      rhythmScore: 1,
     });
+  });
+
+  it('tallies mistakes per expected character', () => {
+    const strokes = [
+      ks('a', 'a', 0),
+      ks('b', 'x', 0),
+      ks('b', 'b', 0),
+      ks('c', 'v', 0),
+      ks('c', 'n', 0),
+    ];
+    const s = computeStats(strokes, 0, 0);
+    expect(s.charErrors).toEqual({ b: 1, c: 2 });
+  });
+
+  it('scores steady typing higher than jittery typing', () => {
+    const steady = computeStats(
+      [0, 100, 200, 300, 400].map((t) => ks('a', 'a', t)),
+      0,
+      400,
+    );
+    const jittery = computeStats(
+      [0, 20, 400, 430, 900].map((t) => ks('a', 'a', t)),
+      0,
+      900,
+    );
+    expect(steady.rhythmScore).toBeCloseTo(1);
+    expect(jittery.rhythmScore).toBeLessThan(steady.rhythmScore);
+  });
+
+  it('ignores long pauses when scoring rhythm', () => {
+    // A big gap (a pause) shouldn't tank an otherwise steady rhythm.
+    const s = computeStats(
+      [0, 100, 200, 5000, 5100, 5200].map((t) => ks('a', 'a', t)),
+      0,
+      5200,
+    );
+    expect(s.rhythmScore).toBeCloseTo(1);
+  });
+
+  it('defaults rhythm to 1 with too few intervals', () => {
+    expect(computeStats([ks('a', 'a', 0)], 0, 0).rhythmScore).toBe(1);
   });
 
   it('counts correct, errors, and accuracy', () => {
@@ -55,12 +98,33 @@ describe('aggregateStats', () => {
     expect(agg.wpm).toBeCloseTo(2 / 5);
   });
 
+  it('merges per-character error maps across drills', () => {
+    const a = computeStats([ks('a', 'x', 0), ks('b', 'y', 0)], 0, 30_000);
+    const b = computeStats([ks('a', 'z', 0)], 0, 30_000);
+    expect(aggregateStats([a, b]).charErrors).toEqual({ a: 2, b: 1 });
+  });
+
+  it('combines rhythm as a length-weighted average', () => {
+    // 4 steady strokes (score ~1) vs. 1 stroke (score 1) -> still ~1.
+    const long = computeStats(
+      [0, 100, 200, 300].map((t) => ks('a', 'a', t)),
+      0,
+      300,
+    );
+    const short = computeStats([ks('a', 'a', 0)], 0, 0);
+    const agg = aggregateStats([long, short]);
+    expect(agg.rhythmScore).toBeGreaterThan(0);
+    expect(agg.rhythmScore).toBeLessThanOrEqual(1);
+  });
+
   it('returns neutral stats for no parts', () => {
     expect(aggregateStats([])).toMatchObject({
       total: 0,
       correct: 0,
       accuracy: 1,
       wpm: 0,
+      charErrors: {},
+      rhythmScore: 1,
     });
   });
 });

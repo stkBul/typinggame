@@ -1,8 +1,11 @@
+import { LESSONS } from '../lessons/curriculum';
 import { advanceStreak, emptyStreak, normalizeStreak } from './streak';
 import type { LessonRecord, LessonResult, ProgressData } from './types';
 
 export const STORAGE_KEY = 'tastetrup.progress';
 export const CURRENT_VERSION = 2;
+/** A passed lesson is due for a refresher once it's gone unpractised this long. */
+export const REVIEW_AFTER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 export function createEmptyProgress(): ProgressData {
   return { version: CURRENT_VERSION, records: {}, streak: emptyStreak() };
@@ -35,6 +38,28 @@ export function applyResult(
     records: { ...data.records, [result.lessonId]: record },
     streak: advanceStreak(data.streak, now),
   };
+}
+
+/**
+ * Passed lessons that haven't been practised within {@link REVIEW_AFTER_MS},
+ * ordered so the shakiest passes (smallest WPM margin over target) come first —
+ * spaced repetition focused where it helps most.
+ */
+export function lessonsNeedingReview(
+  data: ProgressData,
+  now: number = Date.now(),
+): string[] {
+  return LESSONS.filter((lesson) => {
+    const record = data.records[lesson.id];
+    if (!record?.passed) return false;
+    return now - record.lastPlayedAt > REVIEW_AFTER_MS;
+  })
+    .sort((a, b) => {
+      const margin = (lesson: (typeof LESSONS)[number]) =>
+        (data.records[lesson.id]?.bestWpm ?? 0) - lesson.targetWpm;
+      return margin(a) - margin(b);
+    })
+    .map((lesson) => lesson.id);
 }
 
 /** Parse stored progress, migrating older versions and falling back to empty. */
